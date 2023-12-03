@@ -3,7 +3,8 @@ from langchain.prompts import PromptTemplate
 
 data = load_dataset("csv", data_files="sample.csv")
 
-model_id = "tiiuae/falcon-7b-instruct"
+#model_id = "DopeorNope/COKAL-DPO_test-v2-13b"        # ko-HellaSwag 1위: 23.12.03 , 비공개
+model_id = "DopeorNope/mistralopithecus-v1-dpo-7b"    # ko-HellaSwag 2위: 23.12.03
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
@@ -11,18 +12,29 @@ model = AutoModelForCausalLM.from_pretrained(
     trust_remote_code=True, 
 )
 
-template = """Answer the following multiple choice question by giving the most appropriate response. Answer should be one among [A, B, C, D, E]
+template = """ 예시를 참고하여, 주어진 전제 문장에 대해 수반 관계에 있는 가설 문장과 모순 관계의 문장 2개를 만들어줘. 
 
-Question: {prompt}\n
-A) {a}\n
-B) {b}\n
-C) {c}\n
-D) {d}\n
-E) {e}\n
+예시)
 
-Answer: {answer}"""
+전제: 
+수반: 
+모순: 
 
-prompt = PromptTemplate(template=template, input_variables=['prompt', 'a', 'b', 'c', 'd', 'e', 'answer'])
+전제: 
+수반: 
+모순: 
+
+전제: 
+수반: 
+모순: 
+
+주어진 문장)
+
+전제: 
+
+"""
+
+prompt = PromptTemplate(template=template, input_variables=['context'])
 
 
 data = data.map(format_text)
